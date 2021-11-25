@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Easy Note</string>
+    <string name="message_added_successfully">Message was added successfully</string>
+    <string name="date">Date</string>
+    <string name="message_text">Message Text</string>
+    <string name="author">Author</string>
+    <string name="add_new_message">Add New Message</string>
 </resources>

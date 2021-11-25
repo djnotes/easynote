@@ -1,6 +1,6 @@
 package com.example.myviewapp.data
 
-import androidx.lifecycle.LiveData
+import com.example.myviewapp.data.model.Message
 import kotlinx.coroutines.flow.Flow
 
 class MessageRepository(private val messageDao: MessageDao) {

@@ -1,7 +1,7 @@
-package com.example.myviewapp.data
+package com.example.myviewapp.data.model
 
-import android.util.Log
 import androidx.lifecycle.*
+import com.example.myviewapp.data.MessageRepository
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
@@ -12,7 +12,7 @@ class MessageViewModel(private val repository: MessageRepository): ViewModel() {
 
     val messages: LiveData<List<Message>> = repository.messages.asLiveData()
 
-    fun addMessage(message: Message) = viewModelScope.launch{
+    suspend fun addMessage(message: Message){
 //        _messages.value?.add(message)
         repository.insert(message)
 //        Log.d("MessageViewModel", "addMessage: count: ${_messages.value?.size}")

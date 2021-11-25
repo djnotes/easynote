@@ -6,6 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.myviewapp.databinding.ActivityNewMessageBinding
 
 class NewMessageActivity: AppCompatActivity() {
+    companion object{
+        val EXTRA_MESSAGE = "com.example.myviewapp.extra_message"
+        val EXTRA_AUTHOR = "com.example.myviewapp.extra_author"
+    }
     private lateinit var binding: ActivityNewMessageBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,8 +20,13 @@ class NewMessageActivity: AppCompatActivity() {
 
         binding.addMessage.setOnClickListener{
             val text = binding.message.text.toString()
+            val author = binding.name.text.toString()
+
             if (text.isNotBlank()) {
-                setResult(RESULT_OK, Intent().apply { putExtra("message", text) })
+                setResult(RESULT_OK, Intent().apply {
+                    putExtra(EXTRA_MESSAGE, text)
+                    putExtra(EXTRA_AUTHOR, author)
+                })
                 finish()
             }
         }

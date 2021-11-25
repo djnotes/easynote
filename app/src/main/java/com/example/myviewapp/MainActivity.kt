@@ -1,31 +1,39 @@
 package com.example.myviewapp
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.Observer
+import androidx.activity.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.myviewapp.data.*
-import com.example.myviewapp.data.Constant.MESSAGE_AUTHOR
-import com.example.myviewapp.data.Constant.MESSAGE_TEXT
+import com.example.myviewapp.data.model.Message
+import com.example.myviewapp.data.model.MessageViewModel
+import com.example.myviewapp.data.model.MessageViewModelFactory
 import com.example.myviewapp.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
-    lateinit var viewModel: MessageViewModel
+    private lateinit var binding: ActivityMainBinding
     private lateinit var startForResult: ActivityResultLauncher<Intent>
     private lateinit var database: MessageDatabase
+    private lateinit var recyclerView: RecyclerView
+
+    private val viewModel: MessageViewModel by viewModels {
+        MessageViewModelFactory((application as EasyNoteApp).repository)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //Binding class for this activity's layout
         binding = ActivityMainBinding.inflate(layoutInflater)
-
 
         setContentView(binding.root)
 
@@ -33,16 +41,32 @@ class MainActivity : AppCompatActivity() {
         database = MessageDatabase.getInstance(applicationContext)
         val repo = MessageRepository(database.messageDao())
 
-        viewModel = MessageViewModelFactory(repo).create(MessageViewModel::class.java)
+
+
+        recyclerView = binding.messagesList
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+
+
 
 
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result->
             if (result.resultCode == Activity.RESULT_OK){
                 result.data?.apply{
-                    val messageText = getStringExtra(MESSAGE_TEXT)
-                    val messageAuthor = getStringExtra(MESSAGE_AUTHOR)
+                    val messageText = getStringExtra(NewMessageActivity.EXTRA_MESSAGE)
+                    val messageAuthor = getStringExtra(NewMessageActivity.EXTRA_AUTHOR)
 
-                    viewModel.addMessage(Message(0L, messageText.toString(), messageAuthor.toString()))
+                    GlobalScope.launch {
+                        viewModel.addMessage(
+                            Message(
+                                0L,
+                                messageText.toString(),
+                                messageAuthor.toString()
+                            )
+                        )
+                        Snackbar.make(binding.root, R.string.message_added_successfully, Snackbar.LENGTH_SHORT)
+                            .show()
+                    }
                 }
 
             }
@@ -57,8 +81,10 @@ class MainActivity : AppCompatActivity() {
             startForResult.launch(intent)
         }
 
-        viewModel.messages.observe(this){list->
-            binding.count.text = "${list.size}"
+        //Add observer for items in database
+        viewModel.messages.observe(this){
+            recyclerView.adapter = MessageListAdapter(this, it)
         }
+
     }
 }
