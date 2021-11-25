@@ -1,4 +1,4 @@
-package com.example.myviewapp
+package com.mehdi.easynote
 
 import org.junit.Test
 

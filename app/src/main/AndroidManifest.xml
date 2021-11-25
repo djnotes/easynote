@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.myviewapp">
+    package="com.mehdi.easynote">
 
     <application
-        android:name=".EasyNoteApp"
+        android:name="com.mehdi.easynote.EasyNoteApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyAppCompatTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.mehdi.easynote.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".EditActivity"/>
+        <activity android:name="com.mehdi.easynote.EditActivity"/>
     </application>
 
 </manifest>

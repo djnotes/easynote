@@ -1,10 +1,7 @@
-package com.example.myviewapp.data
+package com.mehdi.easynote.data
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
-import com.example.myviewapp.data.model.Message
+import androidx.room.*
+import com.mehdi.easynote.data.model.Message
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -16,9 +13,12 @@ interface MessageDao{
     @Query("SELECT * FROM message WHERE text LIKE :keyword")
     fun findMessages(keyword: String): Flow<List<Message>>
 
-    @Insert
-    fun insertMessage(vararg messages: Message)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(vararg messages: Message)
 
+
+    @Update
+    fun update(message: Message)
 
     @Delete
     fun delete(message: Message)

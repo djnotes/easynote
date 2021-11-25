@@ -1,6 +1,6 @@
-package com.example.myviewapp.data
+package com.mehdi.easynote.data
 
-import com.example.myviewapp.data.model.Message
+import com.mehdi.easynote.data.model.Message
 import kotlinx.coroutines.flow.Flow
 
 class MessageRepository(private val messageDao: MessageDao) {
@@ -8,6 +8,12 @@ class MessageRepository(private val messageDao: MessageDao) {
 
     @Suppress("RedundantSuspendModifier")
     suspend fun insert(message: Message){
-        messageDao.insertMessage(message)
+        messageDao.insert(message)
     }
+
+    @Suppress("RedundantSuspendModifier")
+    suspend fun update(message: Message){
+        messageDao.update(message)
+    }
+
 }
