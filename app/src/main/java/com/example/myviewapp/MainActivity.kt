@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,7 +20,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MessageListAdapter.ItemClickListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var startForResult: ActivityResultLauncher<Intent>
     private lateinit var database: MessageDatabase
@@ -53,8 +54,8 @@ class MainActivity : AppCompatActivity() {
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result->
             if (result.resultCode == Activity.RESULT_OK){
                 result.data?.apply{
-                    val messageText = getStringExtra(NewMessageActivity.EXTRA_MESSAGE)
-                    val messageAuthor = getStringExtra(NewMessageActivity.EXTRA_AUTHOR)
+                    val messageText = getStringExtra(EditActivity.EXTRA_MESSAGE)
+                    val messageAuthor = getStringExtra(EditActivity.EXTRA_AUTHOR)
 
                     GlobalScope.launch {
                         viewModel.addMessage(
@@ -76,15 +77,21 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Fab clicked", Toast.LENGTH_LONG).show()
             val intent = Intent(
                 this,
-                NewMessageActivity::class.java
+                EditActivity::class.java
             )
             startForResult.launch(intent)
         }
 
         //Add observer for items in database
         viewModel.messages.observe(this){
-            recyclerView.adapter = MessageListAdapter(this, it)
+            recyclerView.adapter = MessageListAdapter(this, it).apply{
+                setOnClickListener(this@MainActivity)
+            }
         }
 
+    }
+
+    override fun onItemClicked(position: Int) {
+        Log.d("MainActivity", "onItemClicked: $position")
     }
 }

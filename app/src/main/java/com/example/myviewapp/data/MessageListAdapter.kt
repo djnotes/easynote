@@ -1,24 +1,26 @@
 package com.example.myviewapp.data
 
 import android.content.Context
-import android.text.format.DateFormat.format
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myviewapp.R
 import com.example.myviewapp.data.model.Message
 import com.example.myviewapp.databinding.ListItemBinding
-import java.lang.String.format
 import java.text.DateFormat
-import java.time.Instant
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class MessageListAdapter(private val context: Context, private val items: List<Message>): RecyclerView.Adapter<MessageListAdapter.ViewHolder>() {
+    interface ItemClickListener{
+        fun onItemClicked(position: Int)
+    }
+
+    private lateinit var itemClickListener: ItemClickListener
+
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val binding = ListItemBinding.bind(itemView)
+        val root = binding.root
         val itemText = binding.itemText
         val itemAuthor = binding.itemAuthor
         val itemDate = binding.itemDate
@@ -30,6 +32,7 @@ class MessageListAdapter(private val context: Context, private val items: List<M
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.root.setOnClickListener { itemClickListener?.onItemClicked(position)}
         holder.itemText.text = items[position].text
         holder.itemAuthor.text = items[position].author
 //        val date = Date.from(Instant.ofEpochSecond(items[position].timestamp)).toString()
@@ -41,5 +44,10 @@ class MessageListAdapter(private val context: Context, private val items: List<M
 
     override fun getItemCount(): Int {
         return items.size
+    }
+
+
+    fun setOnClickListener(listener: ItemClickListener){
+        itemClickListener = listener
     }
 }
