@@ -17,7 +17,12 @@ class MessageListAdapter(private val context: Context, public var items: List<Me
         fun onItemClicked(position: Int)
     }
 
+    interface ItemLongClickListener{
+        fun onItemLongClicked(position: Int)
+    }
+
     private var mItemClickListener: ItemClickListener? = null
+    private var mItemLongClickListener: ItemLongClickListener? = null
 
 
     fun updateList(items: List<Message>){
@@ -39,6 +44,10 @@ class MessageListAdapter(private val context: Context, public var items: List<Me
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.root.setOnClickListener { mItemClickListener?.onItemClicked(position)}
+        holder.root.setOnLongClickListener{
+            mItemLongClickListener?.onItemLongClicked(position)
+            true
+        }
         holder.itemText.text = items[position].text
         holder.itemAuthor.text = items[position].author
 //        val date = Date.from(Instant.ofEpochSecond(items[position].timestamp)).toString()
@@ -55,5 +64,9 @@ class MessageListAdapter(private val context: Context, public var items: List<Me
 
     fun setOnItemClickListener(listener: ItemClickListener){
         mItemClickListener = listener
+    }
+
+    fun setOnItemLongClickListener(listener: ItemLongClickListener){
+        mItemLongClickListener = listener
     }
 }

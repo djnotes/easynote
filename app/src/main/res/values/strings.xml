@@ -13,4 +13,9 @@
     <string name="message">Message</string>
     <string name="your_name">Your Name</string>
     <string name="remove">Remove</string>
+    <string name="are_you_sure_you_want_to_remove_this_item">Are you sure you want to remove this item?</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
+    <string name="item_text">Item Text</string>
+    <string name="message_delete_successfully">Message was deleted successfully</string>
 </resources>

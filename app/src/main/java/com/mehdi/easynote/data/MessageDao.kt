@@ -14,14 +14,15 @@ interface MessageDao{
     fun findMessages(keyword: String): Flow<List<Message>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(vararg messages: Message)
+    suspend fun insert(vararg messages: Message)
 
 
     @Update
-    fun update(message: Message)
+    suspend fun update(message: Message)
+
 
     @Delete
-    fun delete(message: Message)
+    suspend fun delete(message: Message)
 
 
 

@@ -2,6 +2,7 @@ package com.mehdi.easynote.data.model
 
 import androidx.lifecycle.*
 import com.mehdi.easynote.data.MessageRepository
+import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
 class MessageViewModel(private val repository: MessageRepository): ViewModel() {
@@ -11,14 +12,18 @@ class MessageViewModel(private val repository: MessageRepository): ViewModel() {
 
     val messages: LiveData<List<Message>> = repository.messages.asLiveData()
 
-    suspend fun addMessage(message: Message){
+    fun addMessage(message: Message) = viewModelScope.launch {
 //        _messages.value?.add(message)
         repository.insert(message)
 //        Log.d("MessageViewModel", "addMessage: count: ${_messages.value?.size}")
     }
 
-    suspend fun updateMessage(message: Message){
+    fun updateMessage(message: Message) = viewModelScope.launch{
         repository.update(message)
+    }
+
+    fun removeMessage(message: Message) = viewModelScope.launch{
+        repository.remove(message)
     }
 
 

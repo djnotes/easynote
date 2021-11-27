@@ -16,4 +16,9 @@ class MessageRepository(private val messageDao: MessageDao) {
         messageDao.update(message)
     }
 
+    @Suppress("RedundantSuspendModifier")
+    suspend fun remove(message: Message) {
+        messageDao.delete(message)
+    }
+
 }

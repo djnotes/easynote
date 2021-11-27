@@ -9,25 +9,32 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.liveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.mehdi.easynote.R
 import com.mehdi.easynote.data.model.Message
 import com.mehdi.easynote.data.model.MessageViewModel
 import com.mehdi.easynote.data.model.MessageViewModelFactory
 import com.mehdi.easynote.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 import com.mehdi.easynote.data.MessageListAdapter
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlin.coroutines.coroutineContext
+import kotlin.coroutines.suspendCoroutine
 
-class MainActivity : AppCompatActivity(), MessageListAdapter.ItemClickListener {
-    private lateinit var binding: ActivityMainBinding
+class MainActivity : AppCompatActivity(), MessageListAdapter.ItemClickListener,
+    MessageListAdapter.ItemLongClickListener, MyDialog.ItemCallback {
+    private lateinit var mBinding: ActivityMainBinding
     private lateinit var mActivityLauncher: ActivityResultLauncher<Intent>
     private lateinit var recyclerView: RecyclerView
     private val mAdapter: MessageListAdapter = MessageListAdapter(this).apply{
         setOnItemClickListener(this@MainActivity)
+        setOnItemLongClickListener(this@MainActivity)
     }
+
+
+
     private var mSelectedItemID: Long? = null
 
     private val mViewModel: MessageViewModel by viewModels {
@@ -38,12 +45,13 @@ class MainActivity : AppCompatActivity(), MessageListAdapter.ItemClickListener {
         super.onCreate(savedInstanceState)
 
         //Binding class for this activity's layout
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        mBinding = ActivityMainBinding.inflate(layoutInflater)
 
-        setContentView(binding.root)
+        setContentView(mBinding.root)
 
-        recyclerView = binding.messagesList
+        recyclerView = mBinding.messagesList
         recyclerView.layoutManager = LinearLayoutManager(this)
+
 
 
 
@@ -57,40 +65,45 @@ class MainActivity : AppCompatActivity(), MessageListAdapter.ItemClickListener {
                     val messageText = getStringExtra(EditActivity.EXTRA_MESSAGE)
                     val messageAuthor = getStringExtra(EditActivity.EXTRA_AUTHOR)
 
-                    GlobalScope.launch {
-                        if (mSelectedItemID == null) {
-                            mViewModel.addMessage(
-                                Message(
-                                    0L, //0 Means generate UID
-                                    messageText.toString(),
-                                    messageAuthor.toString()
+                            if (mSelectedItemID == null) {
+                                mViewModel.addMessage(
+                                    Message(
+                                        0L, //0 Means generate UID
+                                        messageText.toString(),
+                                        messageAuthor.toString()
+                                    )
                                 )
-                            )
-                            Snackbar.make(
-                                binding.root,
-                                R.string.message_added_successfully,
-                                Snackbar.LENGTH_SHORT
-                            )
-                                .show()
-                        }
-                        else {
-                            mSelectedItemID?.let { mViewModel.updateMessage(Message(it, messageText.toString(), messageAuthor.toString())) }
-                            Snackbar.make(binding.root,
-                                R.string.message_updated_successfully,
-                                Snackbar.LENGTH_SHORT
-                            ).show()
+                                Snackbar.make(
+                                    mBinding.root,
+                                    R.string.message_added_successfully,
+                                    Snackbar.LENGTH_SHORT
+                                )
+                                    .show()
+                            } else {
+                                mSelectedItemID?.let {
+                                    mViewModel.updateMessage(
+                                        Message(
+                                            it,
+                                            messageText.toString(),
+                                            messageAuthor.toString()
+                                        )
+                                    )
+                                }
+                                Snackbar.make(
+                                    mBinding.root,
+                                    R.string.message_updated_successfully,
+                                    Snackbar.LENGTH_SHORT
+                                ).show()
 
-                            //Set seleted item to null
-                            mSelectedItemID = null
-                        }
-                    }
+                                //Set selected item to null
+                                mSelectedItemID = null
+                            }
                 }
 
             }
         }
 
-        binding.fab.setOnClickListener {
-            Toast.makeText(this, "Fab clicked", Toast.LENGTH_LONG).show()
+        mBinding.fab.setOnClickListener {
             val intent = Intent(
                 this,
                 EditActivity::class.java
@@ -123,4 +136,34 @@ class MainActivity : AppCompatActivity(), MessageListAdapter.ItemClickListener {
             }
         )
     }
+
+    override fun onItemLongClicked(position: Int) {
+        val selectedItem = mAdapter.items[position]
+        Log.d("MainActivity", "onItemLongClicked: $position. id: ${selectedItem.uid}")
+
+        MyDialog()
+            .apply{
+                arguments = Bundle().apply{
+                    putString(MyDialog.EXTRA_TEXT, selectedItem.text)
+                    putLong(MyDialog.EXTRA_MESSAGE_ID, selectedItem.uid)
+                }
+                setItemCallback(this@MainActivity)
+            }
+            .show(supportFragmentManager, "my_dialog")
+    }
+
+    override fun onConfirmDelete(id: Long) {
+        Log.d("MainActivity", "onConfirmDelete:")
+        val message = mAdapter.items.find { it.uid == id}
+            message?.let {
+                mViewModel.removeMessage(it)
+                Snackbar.make(
+                    mBinding.root,
+                    R.string.message_delete_successfully,
+                    Snackbar.LENGTH_SHORT
+                )
+                    .show()
+            }
+    }
+
 }
