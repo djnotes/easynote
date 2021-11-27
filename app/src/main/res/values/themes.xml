@@ -18,7 +18,7 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="colorPrimary">@color/blue_500</item>
         <item name="colorAccent">@color/orange_200</item>
-        <item name="fontFamily">@font/gemunu</item>
+        <item name="fontFamily">@font/josefin_sans</item>
     </style>
 
 </resources>
