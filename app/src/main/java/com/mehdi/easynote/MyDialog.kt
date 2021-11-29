@@ -5,13 +5,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.DialogFragment
 import com.mehdi.easynote.databinding.MyDialogBinding
 
@@ -39,6 +41,48 @@ class MyDialog: DialogFragment() {
 
 //        mBinding.dialogText.text = mText
 
+    mBinding.root.apply{
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+        setContent{
+            Column(Modifier.wrapContentSize()) {
+
+                //Alert Text
+                Text(stringResource(R.string.are_you_sure_you_want_to_remove_this_item), modifier = Modifier
+                    .padding(dimensionResource(id = R.dimen.default_padding))
+                )
+
+                //Alert Message
+                Text(mText, modifier = Modifier.padding(dimensionResource(R.dimen.default_padding)),
+                overflow = TextOverflow.Ellipsis, maxLines = 1)
+
+                //Buttons
+                Row(Modifier
+                    .fillMaxWidth(8.0f)
+                    .wrapContentHeight(),
+                    horizontalArrangement = Arrangement.Center
+                    ){
+                    //Yes
+                    Button({
+                        mItemId?.let { mItemCallback?.onConfirmDelete(it) }
+                        dismiss()
+                    },  modifier = Modifier
+                        .weight(0.3f)
+                        .padding(dimensionResource(R.dimen.default_padding))
+                    ) { Text(stringResource(id = R.string.yes)) }
+
+                    //Cancel
+                    Button({
+                        dismiss()
+                    }, modifier = Modifier
+                        .weight(0.3f)
+                        .padding(dimensionResource(R.dimen.default_padding))) { Text(stringResource(id = R.string.cancel)) }
+                }
+
+
+            }
+        }
+    }
+/*
         mBinding.alertText.apply{
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent{
@@ -66,9 +110,10 @@ class MyDialog: DialogFragment() {
 
         mBinding.cancel.setOnClickListener { dismiss()}
 
-        return mBinding.root
+        */
 //        return super.onCreateView(inflater, container, savedInstanceState)
 
+        return mBinding.root
     }
 
     override fun setArguments(args: Bundle?) {
