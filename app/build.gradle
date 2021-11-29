@@ -50,6 +50,11 @@ android {
 
     buildFeatures{
         viewBinding true
+        compose true
+    }
+
+    composeOptions{
+        kotlinCompilerExtensionVersion compose
     }
 
 }
@@ -79,6 +84,15 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle"
 
+
+    //Compose
+    implementation "androidx.compose.runtime:runtime-livedata:$compose"
+    implementation "androidx.compose.foundation:foundation:$compose"
+    implementation "androidx.compose.ui:ui:$compose"
+    implementation "androidx.compose.ui:ui-tooling:$compose"
+    implementation "androidx.compose.material:material:$compose"
+    implementation "androidx.compose.material:material-icons-core:$compose"
+    implementation "androidx.compose.material:material-icons-core:$compose"
 
 
 

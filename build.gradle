@@ -14,5 +14,6 @@ allprojects{
         room = "2.3.0"
         coroutines = "1.5.2"
         lifecycle = "2.4.0"
+        compose = "1.1.0-beta03"
     }
 }

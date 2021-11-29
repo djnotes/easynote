@@ -5,6 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.fragment.app.DialogFragment
 import com.mehdi.easynote.databinding.MyDialogBinding
 
@@ -30,7 +37,25 @@ class MyDialog: DialogFragment() {
     ): View? {
         mBinding = MyDialogBinding.inflate(layoutInflater, container, false)
 
-        mBinding.dialogText.text = mText
+//        mBinding.dialogText.text = mText
+
+        mBinding.alertText.apply{
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent{
+                Text(stringResource(R.string.are_you_sure_you_want_to_remove_this_item), modifier = Modifier
+                    .padding(dimensionResource(R.dimen.default_padding)))
+            }
+        }
+
+        mBinding.dialogText.apply{
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent{
+                Text(mText, modifier = Modifier.padding(dimensionResource(id = R.dimen.default_padding)),
+                maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
+        }
+
+
         mBinding.confirm.setOnClickListener {
             Log.d("MyDialog", "onCreateView: confirm clicked")
             mItemId?.let {
