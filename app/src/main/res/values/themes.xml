@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="fontFamily">@font/gemunu</item>
         <!-- Shapes -->
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MyApp.SmallComponent</item>
         <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MyApp.MediumComponent</item>
@@ -22,19 +23,15 @@
     <style name="Theme.MyAppCompatTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="colorPrimary">@color/blue_500</item>
-        <item name="colorAccent">@color/orange_200</item>
+        <item name="colorAccent">@color/red_300</item>
         <item name="fontFamily">@font/josefin_sans</item>
+        <item name="buttonStyle">@style/Theme.MyApp.MyButton</item>
         <!-- Shapes -->
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">6dp</item>
     </style>
 
-
-    <style name="Widget.MyApp.MaterialCardView" parent="Widget.MaterialComponents.CardView">
-        <item name="background">@drawable/item_background</item>
-        <item name="backgroundColor">#a40a34</item>
-        <item name="elevation">4dp</item>
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MyApp.MaterialCardView</item>
+    <style name="Theme.MyApp.MyButton" parent="Widget.AppCompat.Button">
+        <item name="backgroundColor">#234323</item>
     </style>
 
 
