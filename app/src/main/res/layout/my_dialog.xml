@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:padding="@dimen/default_padding"
     tools:theme="@style/Theme.MyAppTheme"
-    style="@style/Theme.AppCompat.Dialog.Alert"
     >
 
     <TextView
@@ -17,7 +16,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/are_you_sure_you_want_to_remove_this_item"
-        style="@style/Theme.AppCompat.Dialog.Alert"
         android:padding="@dimen/default_padding"
         />
 
