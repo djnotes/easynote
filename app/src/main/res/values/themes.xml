@@ -10,9 +10,11 @@
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">?android:attr/statusBarColor</item>
         <!-- Customize your theme here. -->
-        <item name="fontFamily">@font/gemunu</item>
+        <item name="fontFamily">@font/josefin_sans</item>
+        <item name="fontStyle">normal</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.MyApp.Body1</item>
         <!-- Shapes -->
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MyApp.SmallComponent</item>
         <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MyApp.MediumComponent</item>
@@ -20,18 +22,32 @@
 
     </style>
 
+
+
     <style name="Theme.MyAppCompatTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">?android:attr/statusBarColor</item>
         <item name="colorPrimary">@color/blue_500</item>
         <item name="colorAccent">@color/red_300</item>
-        <item name="fontFamily">@font/josefin_sans</item>
+        <item name="fontFamily">@font/gemunu</item>
         <item name="buttonStyle">@style/Theme.MyApp.MyButton</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.MyAppCompatTheme.Body1</item>
         <!-- Shapes -->
         <item name="cornerFamily">rounded</item>
     </style>
 
+
+    <style name="TextAppearance.MyApp.Body1" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">20pt</item>
+        <item name="fontStyle">italic</item>
+    </style>
+
     <style name="Theme.MyApp.MyButton" parent="Widget.AppCompat.Button">
-        <item name="backgroundColor">#234323</item>
+        <item name="backgroundTint">@color/blue_500</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
+    <style name="TextAppearance.MyAppCompatTheme.Body1" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">8pt</item>
     </style>
 
 
