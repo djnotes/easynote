@@ -94,7 +94,11 @@ dependencies {
     implementation "androidx.compose.material:material-icons-core:$compose"
     implementation "androidx.compose.material:material-icons-core:$compose"
 
+    //Compose Material Theme Adapter
+    implementation "com.google.android.material:compose-theme-adapter:1.1.0"
 
-
+    //Accompanist AppCompat Theme Adapter
+    implementation "com.google.accompanist:accompanist-appcompat-theme:0.21.3-beta"
+    
 
 }

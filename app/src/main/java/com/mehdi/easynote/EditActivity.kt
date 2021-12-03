@@ -13,6 +13,8 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.appcompattheme.AppCompatTheme
+import com.google.android.material.composethemeadapter.MdcTheme
 import com.mehdi.easynote.databinding.ActivityEditBinding
 
 
@@ -46,11 +48,13 @@ class EditActivity : AppCompatActivity() {
         binding.header.apply{
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnLifecycleDestroyed(lifecycle))
             setContent{
-                Text(
-                    if (requestedAction == Action.EDIT) stringResource(R.string.editing_message)
-                else stringResource(id = R.string.add_new_message),
-                    modifier = Modifier.padding(8.dp)
-                )
+                AppCompatTheme{
+                    Text(
+                        if (requestedAction == Action.EDIT) stringResource(R.string.editing_message)
+                        else stringResource(id = R.string.add_new_message),
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
             }
         }
 
@@ -58,14 +62,17 @@ class EditActivity : AppCompatActivity() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnLifecycleDestroyed(lifecycle))
             setContent{
                 val (input, onInputChange) = remember{mutableStateOf(mText)}
-                TextField(
-                    value = input, onValueChange = {
-                        onInputChange(it)
-                        mText = it
-                                                   },
-                    modifier = Modifier
-                        .padding(dimensionResource(R.dimen.default_padding)),
-                )
+                AppCompatTheme{
+                    TextField(
+                        value = input,
+                        onValueChange = {
+                            onInputChange(it)
+                            mText = it
+                        },
+                        modifier = Modifier
+                            .padding(dimensionResource(R.dimen.default_padding)),
+                    )
+                }
             }
         }
 

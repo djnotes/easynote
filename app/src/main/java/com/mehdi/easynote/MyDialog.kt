@@ -15,6 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.DialogFragment
+import com.google.accompanist.appcompattheme.AppCompatTheme
+import com.google.android.material.composethemeadapter.MdcTheme
 import com.mehdi.easynote.databinding.MyDialogBinding
 
 class MyDialog: DialogFragment() {
@@ -44,41 +46,53 @@ class MyDialog: DialogFragment() {
     mBinding.root.apply{
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         setContent{
-            Column(Modifier.wrapContentSize()) {
+            AppCompatTheme{
+                Column(Modifier.wrapContentSize()) {
 
-                //Alert Text
-                Text(stringResource(R.string.are_you_sure_you_want_to_remove_this_item), modifier = Modifier
-                    .padding(dimensionResource(id = R.dimen.default_padding))
-                )
+                    //Alert Text
+                    Text(
+                        stringResource(R.string.are_you_sure_you_want_to_remove_this_item),
+                        modifier = Modifier
+                            .padding(dimensionResource(id = R.dimen.default_padding))
+                    )
 
-                //Alert Message
-                Text(mText, modifier = Modifier.padding(dimensionResource(R.dimen.default_padding)),
-                overflow = TextOverflow.Ellipsis, maxLines = 1)
+                    //Alert Message
+                    Text(
+                        mText,
+                        modifier = Modifier.padding(dimensionResource(R.dimen.default_padding)),
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
 
-                //Buttons
-                Row(Modifier
-                    .fillMaxWidth(8.0f)
-                    .wrapContentHeight(),
-                    horizontalArrangement = Arrangement.Center
-                    ){
-                    //Yes
-                    Button({
-                        mItemId?.let { mItemCallback?.onConfirmDelete(it) }
-                        dismiss()
-                    },  modifier = Modifier
-                        .weight(0.3f)
-                        .padding(dimensionResource(R.dimen.default_padding))
-                    ) { Text(stringResource(id = R.string.yes)) }
+                    //Buttons
+                    Row(
+                        Modifier
+                            .fillMaxWidth(8.0f)
+                            .wrapContentHeight(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        //Yes
+                        Button(
+                            {
+                                mItemId?.let { mItemCallback?.onConfirmDelete(it) }
+                                dismiss()
+                            }, modifier = Modifier
+                                .weight(0.3f)
+                                .padding(dimensionResource(R.dimen.default_padding))
+                        ) { Text(stringResource(id = R.string.yes)) }
 
-                    //Cancel
-                    Button({
-                        dismiss()
-                    }, modifier = Modifier
-                        .weight(0.3f)
-                        .padding(dimensionResource(R.dimen.default_padding))) { Text(stringResource(id = R.string.cancel)) }
+                        //Cancel
+                        Button(
+                            {
+                                dismiss()
+                            }, modifier = Modifier
+                                .weight(0.3f)
+                                .padding(dimensionResource(R.dimen.default_padding))
+                        ) { Text(stringResource(id = R.string.cancel)) }
+                    }
+
+
                 }
-
-
             }
         }
     }
